@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once 'Auth.php';
+require_once 'auth-guard/Auth.php';
 
 // Uncomment to protect this page:
 // if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
@@ -25,6 +25,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $success = 'Document received successfully! It has been added to the pending queue.';
     }
 }
+
+// Function to get initials from email
+function getInitialsFromEmail($email) {
+    // If email is empty, return default
+    if (empty($email)) {
+        return 'U';
+    }
+    
+    // Split email by @ and take the first part
+    $namePart = explode('@', $email)[0];
+    
+    // Split by dots, underscores, or hyphens
+    $parts = preg_split('/[._-]/', $namePart);
+    
+    $initials = '';
+    
+    // Take first letter of each part (up to 2 letters)
+    foreach ($parts as $part) {
+        if (!empty($part)) {
+            $initials .= strtoupper(substr($part, 0, 1));
+        }
+        // Limit to 2 initials
+        if (strlen($initials) >= 2) {
+            break;
+        }
+    }
+    
+    // If we still don't have initials, use first letter of email
+    if (empty($initials) && !empty($email)) {
+        $initials = strtoupper(substr($email, 0, 1));
+    }
+    
+    return $initials ?: 'U'; // Default to 'U' if all else fails
+}
+
+// Get user email from session
+$user_email = $_SESSION['user_email'] ?? '';
+$user_initials = getInitialsFromEmail($user_email);
+
+// Get user role from session (or default to 'User')
+$user_role = $_SESSION['user_role'] ?? 'user';
+$user_role_display = ucfirst($user_role);
+?>
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -167,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <ul class="space-y-2">
                 <li>
                     <a
-                        href="login.php"
+                        href="logout.php"
                         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-crimson-800 transition duration-200"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,17 +250,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </svg>
                             <span class="absolute top-1 right-1 w-2 h-2 bg-crimson-600 rounded-full"></span>
                         </button>
-                        <div class="flex items-center space-x-3">
-                            <div class="hidden sm:block text-right">
-                                <p class="text-sm font-semibold text-gray-800 font-secondary">
-                                    <?= htmlspecialchars($_SESSION['user_email'] ?? 'Aaron Flores') ?>
-                                </p>
-                                <p class="text-xs text-gray-600 font-secondary">Administrator</p>
-                            </div>
-                            <div class="w-10 h-10 bg-crimson-700 rounded-full flex items-center justify-center">
-                                <span class="text-white font-semibold font-secondary">AF</span>
-                            </div>
-                        </div>
+                        
+                            <div class="flex items-center space-x-3">
+                                <div class="hidden sm:block text-right">
+                                     <p class="text-sm font-semibold text-gray-800 font-secondary">
+                                       <?= htmlspecialchars($user_email ?: 'Guest User') ?>
+                                    </p>
+                                     <p class="text-xs text-gray-600 font-secondary"><?= htmlspecialchars($user_role_display) ?></p>
+                             </div>
+                             <div class="w-10 h-10 bg-crimson-700 rounded-full flex items-center justify-center">
+                                   <span class="text-white font-semibold font-secondary"><?= htmlspecialchars($user_initials) ?></span>
+                             </div>
+</div> 
                     </div>
                 </div>
             </div>
