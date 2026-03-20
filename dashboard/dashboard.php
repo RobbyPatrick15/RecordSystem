@@ -21,7 +21,7 @@ $users = [
 
 <div class="flex">
 
-    <?php include '../sidebar/sidebar.php'; ?>
+    <?php include __DIR__ . '/../sidebar/sidebar.php'; ?>
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 ml-64 p-6">
