@@ -188,11 +188,9 @@ $all_receivers = [
                                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-crimson-700 focus:ring-2 focus:ring-crimson-200 transition duration-200 font-secondary"
                                 >
                                     <option value="">Select document type...</option>
-                                    <option value="form"        <?= ($_POST['documentType'] ?? '') === 'form'        ? 'selected' : '' ?>>Form</option>
-                                    <option value="transcript"  <?= ($_POST['documentType'] ?? '') === 'transcript'  ? 'selected' : '' ?>>Transcript</option>
-                                    <option value="certificate" <?= ($_POST['documentType'] ?? '') === 'certificate' ? 'selected' : '' ?>>Certificate</option>
-                                    <option value="diploma"     <?= ($_POST['documentType'] ?? '') === 'diploma'     ? 'selected' : '' ?>>Diploma</option>
-                                    <option value="clearance"   <?= ($_POST['documentType'] ?? '') === 'clearance'   ? 'selected' : '' ?>>Clearance</option>
+                                    <option value="memorandum"        <?= ($_POST['documentType'] ?? '') === 'memorandum'        ? 'selected' : '' ?>>Memorandum Order</option>
+                                    <option value="SpecialOrder"  <?= ($_POST['documentType'] ?? '') === 'SpecialOrder'  ? 'selected' : '' ?>>Special Order</option>
+                                    <option value="TravelOrder" <?= ($_POST['documentType'] ?? '') === 'TravelOrder' ? 'selected' : '' ?>>Travel Order</option>
                                     <option value="other"       <?= ($_POST['documentType'] ?? '') === 'other'       ? 'selected' : '' ?>>Other</option>
                                 </select>
                             </div>
